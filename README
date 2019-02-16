@@ -1,0 +1,279 @@
+------------------------------------------------------------------------------------------------------------------------------------
+Linux kernelresides in pathname /boot/vmlinuz
+	On linux the kernel was called Unix 
+	Later Unix implementaion implemented virtual memory, so remaned to vmunix
+	On Linux the filename mirrors the system name with replacing the final x to z, vmlinuz to signify that kernel is compressed kernel
+
+------------------------------------------------------------------------------------------------------------------------------------
+Tasks performed by kernel
+	1. Process sceduling
+	2. Memory Management
+	3. Provision of the file system
+	4. Creation and termination of the process
+	5. Access devices
+	6. Networking
+	7. Provision of a system call Application Programming Interface
+
+------------------------------------------------------------------------------------------------------------------------------------
+User Mode and Kernel Mode
+	When running in user mode, the CPU can access the memory that is marked as being in User space; attempts to access memory in kernel
+	results in a hardware exception.
+	When running in kernel mode, the cpu can access both user and kernel memory space.
+	Certain operation can be performed only while processor is operating in kernel mode. Example executing the halt instruction to stop 
+	the system, accessing the memory management hardware, and initiating the I/O operations.
+	By taking the advantage of hardware design to place the operating system in kernel space, operating system can be ensure that the
+	user processes can not access the instruction and data structure of the kernel, or to perform operations that would adversly affect
+	operation of the system.
+   	 
+------------------------------------------------------------------------------------------------------------------------------------
+Process versus kernel views of the system
+	Process									Kernel
+
+	- For process many things happen asynchronously	
+	- An executing process dosen't know when it will
+	  next time out, which other process will then scheduled
+	  by the CPU or when it will be nex scheduled.				- The delivey of the signal and occurances of interprocess
+										  communications avents are mediated by the kernel, and can											  occur at any time of process.
+	- The process dosen't know where it is located in RAM or, in general 
+	  whethe a particular part of its memory space is currrently resident 
+	  in memory or held in swap area.
+	- Process operates in isolation.
+	- It cant directly communicate with another process.
+	- Process can't itself create a new process or even end its own existences
+	- Finally a process can't communicate direcly with input and output devices 
+	  attatched to the computer
+
+										- The running system has a one kernel that knows and controls
+										 everything.
+										- The kernel facilitate the running of the all processes on the 
+										  system
+										- The kernel decide which process will next obtain access to the
+										  CPU, when it will do so, and how long.
+										-  The kenel maitaining the data structures containing the 
+										   information about all running processes and updates these 
+									           structure as process created, change state, and terminates.
+										- The kernel also maitain the data structure that maps the 
+										  virtual memory of each process into physical memory of the 
+										  computer and swap area on disk.
+										- All communication between process is done via mechanism 
+										  provided by the kernel.
+ 		
+------------------------------------------------------------------------------------------------------------------------------------
+Shell
+
+	A special purpose program designed to read a command typed by the user and execute appropriates program in responce to thoes commands
+	It is also called COmmand interpreter.
+	Types:
+		1. Bourne Shell(sh)
+		2. C shell(csh)
+		3. Korn Shell(ksh)
+		4. Bourne again Shell(Bash)
+	
+------------------------------------------------------------------------------------------------------------------------------------
+Users and Group
+
+	Every user of the system has the unique login name(username) and corresponding numeric user ID (UID). 
+	Which is stored in the password file (/etc/passwd)
+	
+	For administrative purpose-in particular, for controlling access to file and othe system resources-it is useful to organize user into 
+	groups. Ex. The people in team working on a single project and thus sharing the comman set of file, might all be made members of the 
+        same groups. System group file (/etc/group)
+	Superuser: Has priviledge within the system. It has the user id 0 and normally has the login name root.
+
+------------------------------------------------------------------------------------------------------------------------------------
+File 
+
+	Stores data and programs
+	Within the file system each file is marked with a type, indicating what kind of the file it is.
+	One of the file which is called plain or regular or ordinay file .
+	Other type od file include devices, pipes, sockets, directories and symbolic links.
+	The term file is commanly used to denote a file of any type, not just a regular file.
+
+------------------------------------------------------------------------------------------------------------------------------------
+Directory
+
+	It is a special file.
+	The filename-plus-reference association is called link.
+	And file may have multiple links and thus multiple names, in the same same or different directories.
+	Directory may contain the link to both files and other directory.
+	Each directory contain at least two entry. 
+		1. dot (.), link to the directory itself
+		2. double dot(..), link to the parent directory
+
+------------------------------------------------------------------------------------------------------------------------------------
+Symbolic Link
+	It provide the alternate name for a file.
+	Normal link is a filename-plue-pointer entry in a directory list.
+	Symbolic link is a specially marked file containing a name of another file.
+	In another way symbolic link has a filename-plus-pointer entry in a diectory, and the file referred to by the pointer containing the 
+	sting that names another file.
+	The symbolic links pointes or refers to a target file.
+	When a pathname specified in system call, in most circumsentence, the kernel automatically dereference(or synonymously, follows)
+	each symbolic link in a pathname, replacing it with filename to which it points.
+	If the symbolic link referes to a file that dosen't exist, it is called to ba a dangling link.
+	Often hard link and soft link are used as alternative terms for normal and symbolic links.
+
+------------------------------------------------------------------------------------------------------------------------------------
+Filename
+	On most linux system the filename can be upto 255 characters long.
+	It contain any character except slash(/) and null character(\0).
+	
+------------------------------------------------------------------------------------------------------------------------------------
+Pathnames
+	It is a string consisting of an optional initial slash(\) followed by a serries of filename seperated by slashes
+	The pathname is read from left to right .
+	
+------------------------------------------------------------------------------------------------------------------------------------
+Absolute Pathname
+	It begins with a slash(/) and specifies locations of the file with respect to root directory. Eg. /usr/include/.
+	And the / pathname of root directory.
+
+------------------------------------------------------------------------------------------------------------------------------------
+Relative Pathname
+	It specifies the location of file relative to a process's current working directory.
+	And it distinguished from an absolute pathname by the absence of an initial slash include/sys/types.h
+
+------------------------------------------------------------------------------------------------------------------------------------
+Current Working Directory
+	Each process has current working directory. 
+	Just referred as process working directory or current directory.
+	
+------------------------------------------------------------------------------------------------------------------------------------
+File ownership and Permissions
+	Each file associated user ID and group ID that defines the owner(user) of the file.
+	For the purpose of accessing a file, the system divides user into three categories:
+		a. Owner(User of the file)
+		b. Group(User who are member of the group matching group ID)
+		c. Other(Rest of the world)
+
+	Three permission bits may be set for each of these categories. Below permission can be set on directory as well.
+		a. read    : Allows contents of the file to be read
+		b. write   : Modification of contents of file
+		c. execute : Execution of the file
+
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+File I/O Model
+	Same system call read(), write(), open() and so on are used to perform I/O on all types of files, including devices.
+ 
+------------------------------------------------------------------------------------------------------------------------------------
+File descriptors
+	The I/O system call refers to open file using File descriptor, usually a small non-negative integer.
+	A FD typically obtained by a call to open(), which takes a pathname argument specifying a file upon which I/O is to be performed.
+	Normally, a process inherits three open file descriptors when it is started by the shell.
+		a. Descriptor 0 : Standard input (The file from which the process takes input)
+		b. Descriotor 1 : Standard output (The file from which the process writes it's output)
+		c. Descriptor 2 : Standard Error (The file to which the process writes error messages and notification of exceptions or 
+		                  abnormal conditions).
+	In stdio library, these descriptor correspond to the file streams stdin, stdout, and stderr.
+
+------------------------------------------------------------------------------------------------------------------------------------
+The stdio library
+	To perform I/O, C programs typically employ I/O functions contained in the standard C library. This set of function referred to as 
+	the stdio library, includes fopen(), fclose(), fprintf(), fscanf(), fgets(), fputs(), and so on.
+	The stdio function layered on top of the I/O system calls (open(), close(), read(), write, and so on).
+
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+Programs
+	Program normally exists in two forms. 
+	a. Source code: Human readable text consisting of a serries of statements written in a programming languages such a C.
+	b. Binary machine-language instruction: To be executed, source code must be converted to the second form that the computer can
+						understand.
+	The two meanings of the term program are normally considered synonymous, since the step of compiling and linking converts souce code 
+	into semantically equivalent binary machine code.
+
+------------------------------------------------------------------------------------------------------------------------------------
+Filter
+	Is the name often applied to a program that reads input from stdin, perform some transformation of that input, and writes the 
+	transformed data to stdout.
+	Eg. cat, greap, tr, sort, wc, sed, and awk.	
+
+------------------------------------------------------------------------------------------------------------------------------------
+Command Line Arguments
+	The words that are supplied on the command line when the program is run.
+	TO access the command line arguments, the main() fucntion declared as :
+		int main(int argc, char *argv[])
+		argc: Total number of command-line arguments
+		argv: Individual arguments are available as strings pointed to by members of the array argv. argv[0], identifies the name of 
+		      the program itself.
+
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+Process
+	It is an instance of an executing program.
+	When a program is executed, the kernel loads the code of the program into virtual memory, allocates space for program variables, and 
+	setup kernel bookkeeping data structures to records various information(such as process ID, termination status, user IDs, and group IDs)
+	about the process.
+	From kernel point of view, processes are the entities among which the kernel must share the various resources of the computer.
+	For resources that are limited, such as memory, the kernel initially allocates some amount of the the resource to the process, and 
+	adjusts this allocation over the lifetime of the process in responce to the demand for that resource.
+	When the process terminates, all such resources are released for reuse by other processes.
+	Other resources such as the CPU and network bandwidth, are renewable, but must be shared equitably among all processes.
+
+------------------------------------------------------------------------------------------------------------------------------------
+Process Memory Layout
+	Logically deviced into following parts, known as segments:
+	a. Text : The instruction of the program
+	b. Data : the static variable used by the program
+	c. Heap : The area from which programs can dynamically alllocates extra memory
+	d. Stack: A piece of memory that grows and shrinks as functions are called and return and that is used to allocate storage for local 
+		  variables and function call linkage information.
+	
+------------------------------------------------------------------------------------------------------------------------------------
+Process Creation and Program Execution
+	Process can create new process using fork() system call.
+	The process that called fork() is refered to as  the parent process, and the new process is referred to as the child process.
+	The kernel creats child process by duplicating the parent process.
+	The child inherits copies of the parent's data, stack, and heap segments, which it may then modify independently of the parent's 
+	copies. (The program text which is placed in memory marked as read-only, is shared by the two processes)
+	The child inherits copies of the parent's data, stack, and heap segments, which it may then modify independently of the parent's 
+	copies.(The program text, which is placed in memory marked as read-only, is shared by the two processes.)
+	The child process goes on either side to execute a different set of functions in the same code as the parents, or, frequently, to
+	use execve() system call to load and execute an entirely new program.
+	An execve() system call destroys the exixting text, data, stack, and heap segments, replacing them with new segments based on the code 
+	of the new program.
+	
+------------------------------------------------------------------------------------------------------------------------------------
+init process
+	When booting the system, the kernel creates a special process called init, the "parent of all process", which is derived from the 
+	program file /sbin/init.
+	All processes on the system are created(using fork() either by init or by one of its descendants).
+	The init process always has a process id of 1 and runs with superuser priviledges.
+	The init process cant killed(not even by the superuser), and it terminates only when the system is shut down.
+	The mai  task of init is to create and monitor a range of processes required by a running system.
+
+------------------------------------------------------------------------------------------------------------------------------------
+Daemon Process
+	It is a special purpose process is often started at system boot and remains in existance until the system is shutdown.
+	It runs in background, and has no controllling terminal from which it can read input or to which it can write output.
+	Eg: syslogd, which records messages in the system log, and httpd, which serves web pages via the Hypertext Transfere Protocol(HTTP)
+
+------------------------------------------------------------------------------------------------------------------------------------
+Environment List
+	Each process has an environment list, which is a set of environment variables that are maintained within the user-space memory of 
+        the process.
+	Each element of this list consists of a name and an associated value.
+	When a new process is created via fork(), it inherits a copy of its parent’s environment.
+	Environment variables are created with the export command in most shells (or the setenv command in the C shell).
+	
+
+	
+
+
+	
+
+
+	
+
+
+
+
+	
+
+
+
+												
+
+
+
